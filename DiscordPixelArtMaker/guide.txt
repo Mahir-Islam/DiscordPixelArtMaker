@@ -1,0 +1,20 @@
+This program allows you to take advantage of the
+coloured square emojis on Discord to make pixel art.
+
+You will need to have the following installed:
+> pygame
+> pyperclip
+
+Open main.py to run the application and
+you will see a 12x12 grid.
+
+Clicking on a colour will change the brush to that colour.
+Clicking on "COPY" will save the image onto your clipboard.
+Clicking on "CLEAR" will reset the canvas.
+
+If you want to change the size of the grid, then open main.py
+and on line 15, change the value of "ROWS" to whatever you like.
+Be aware that Discord may not be able to
+properly display very large messages.
+
+Follow my GitHub Mahir-Islam :D
