@@ -9,7 +9,7 @@ H = 500
 WIN = pygame.display.set_mode((W,H))
 pygame.display.set_caption("Discord Pixel Art Maker")
 
-ROWS = 12
+ROWS = 7
 
 #Colours
 RED = (221,46,68)
@@ -92,12 +92,12 @@ def make_grid(rows, width):
 
 	return grid
 
-def draw_grid(win, rows, width):
+def draw_grid(win, rows, width, colour=LIGHT_GREY):
 	gap = width // rows
 	for i in range(rows):
-		pygame.draw.line(win, LIGHT_GREY, (0,i*gap), (width, i*gap))
+		pygame.draw.line(win, colour, (0,i*gap), (width, i*gap))
 		for j in range(rows):
-			pygame.draw.line(win, LIGHT_GREY, (j*gap,0), (j*gap,width))
+			pygame.draw.line(win, colour, (j*gap,0), (j*gap,width))
 
 def draw(win, grid, rows, width):
 	#win.fill(WHITE)
@@ -147,6 +147,7 @@ def main(win, width):
 	FONT = pygame.font.Font("bluether.ttf",27)
 	TXTcopy  = FONT.render("COPY",True,(255,255,255),GREY)
 	TXTclear = FONT.render("CLEAR",True,(255,255,255),RED)
+	TXTsave = FONT.render("SAVE",True,(255,255,255),(32,64,128))
 	xSkew = 7
 
 	BLACKb = Button(WIN,BLACK,xSkew,410,30,30).create()
@@ -162,13 +163,16 @@ def main(win, width):
 	Palette = [BLACKb, WHITEb, REDb, GREENb, BLUb, ORANGEb, PURPLEb, BROWNb, YELLOWb]
 
 	while run:
-		draw(win, grid, ROWS, width)
+		draw(win, grid, ROWS, W)
 		
-		SAVEb = Button(WIN,GREY,xSkew,455,xSkew+156,30).create()
-		WIN.blit(TXTcopy,(56, 455))
+		COPYb = Button(WIN,GREY,xSkew,455,xSkew+112,30).create()
+		WIN.blit(TXTcopy,(38, 455)) #56
 
-		CLEARb = Button(WIN,RED,xSkew+176,455,xSkew+156,30).create()
-		WIN.blit(TXTclear,(226, 455))
+		CLEARb = Button(WIN,RED,xSkew+132,455,xSkew+112,30).create()
+		WIN.blit(TXTclear,(160, 455))
+
+		SAVEb = Button(WIN,(32,64,128),xSkew+264,455,xSkew+112,30).create()
+		WIN.blit(TXTsave,(300, 455))
 
 		pygame.display.flip();
 
@@ -186,13 +190,17 @@ def main(win, width):
 						brushIndex = x
 						currentColour = list(Colours)[x]
 
-				if SAVEb.collidepoint(pos):
+				if COPYb.collidepoint(pos):
 					SAVE(BOARD)
 
 				if CLEARb.collidepoint(pos):
 					BOARD = [0] * ROWS**2
 					for s in spots:
 						s.setColour("black")
+
+				if SAVEb.collidepoint(pos):
+					screenRect = pygame.Rect(0,0,ROWS*(W // ROWS), ROWS*(W // ROWS) )
+					pygame.image.save( WIN.subsurface(screenRect), "screenshot.jpg" )
 
 				row, col = get_clicked_pos(pos, ROWS, width)
 				try:
